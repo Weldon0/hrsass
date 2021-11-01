@@ -7,6 +7,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import locale from 'element-ui/lib/locale/lang/en' // lang i18n
 
 import '@/styles/index.scss' // global css
+import '@/utils/request'
 
 import App from './App'
 import store from './store'
@@ -14,6 +15,13 @@ import router from './router'
 
 import '@/icons' // icon
 import '@/permission' // permission control
+
+// 引入指令文件
+import * as directives from './directives'
+
+Object.keys(directives).forEach(key => {
+  Vue.directive(key, directives[key])
+})
 
 /**
  * If you don't want to use mock-server
