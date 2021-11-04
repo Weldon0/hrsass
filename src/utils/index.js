@@ -2,6 +2,8 @@
  * Created by PanJiaChen on 16/11/18.
  */
 
+import { lime } from 'mockjs/src/mock/random/color_dict'
+
 /**
  * Parse the time to string
  * @param {(Object|string|number)} time
@@ -114,4 +116,24 @@ export function param2Obj(url) {
     }
   })
   return obj
+}
+
+// 数组转树结构
+
+// 数组转换树结构
+// 插槽
+// 权限判断
+export function transData(list, pid) {
+  const arr = []
+  list.forEach(item => {
+    // pid为''的数据放到第一层
+    if (item.pid === pid) {
+      const children = transData(list, item.id)
+      if (children.length) {
+        item.children = children
+      }
+      arr.push(item)
+    }
+  })
+  return arr
 }
