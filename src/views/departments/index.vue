@@ -2,7 +2,7 @@
   <div class="dashboard-container">
     <div class="app-container dep">
       <el-card :body-style="{background: '#67C23A', color: '#fff'}" shadow="never">
-        <TreeTools :tree-node="companyNode" />
+        <TreeTools :is-root="true" :tree-node="companyNode" @handleAddDept="handleAddDept" @handleGetDeparts="handleGetDeparts" />
       </el-card>
       <el-tree :default-expand-all="true" :data="departs" :props="defaultProps" @node-click="handleNodeClick">
         <template v-slot="{data}">
@@ -10,7 +10,7 @@
         </template>
       </el-tree>
     </div>
-    <AddDept :show-dialog.sync="showDialog" />
+    <AddDept :show-dialog.sync="showDialog" :tree-node="node" @getDept="handleGetDeparts" />
   </div>
 </template>
 
@@ -46,6 +46,7 @@ export default {
   methods: {
     handleNodeClick() {
     },
+    // 添加子部门的事件
     handleAddDept(node) {
       this.node = node
       this.showDialog = true
@@ -55,7 +56,8 @@ export default {
       // 公司信息
       this.companyNode = {
         name: data.companyName,
-        manager: data.companyManage || '负责人'
+        manager: data.companyManage || '负责人',
+        id: ''
       }
       // tree组件的信息
       this.departs = transData(data.depts, '')
