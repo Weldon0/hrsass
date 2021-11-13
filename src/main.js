@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import Print from 'vue-print-nb'
 
 import 'normalize.css/normalize.css' // A modern alternative to CSS resets
 
@@ -23,19 +24,21 @@ import * as filters from '@/filters'
 console.log(filters)
 // 获取对象的key，放到数组里面
 
-Object.keys(filters).forEach(key => {
+Object.keys(filters).forEach((key) => {
   Vue.filter(key, filters[key])
 })
 
 // 引入指令文件
 import * as directives from './directives'
 
-Object.keys(directives).forEach(key => {
+Object.keys(directives).forEach((key) => {
   Vue.directive(key, directives[key])
 })
 
 Vue.use(Component) // {install: (Vue) => {}} (Vue) => {}
 
+// 打印插件注册好了
+Vue.use(Print)
 // 传入的参数对象 ==> install
 
 /**
@@ -62,5 +65,5 @@ new Vue({
   el: '#app',
   router,
   store,
-  render: h => h(App)
+  render: (h) => h(App)
 })

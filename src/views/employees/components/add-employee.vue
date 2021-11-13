@@ -1,26 +1,63 @@
 <template>
   <el-dialog title="新增员工" :visible="showDialog" @close="btnCancel">
     <!-- 表单 -->
-    <el-form ref="depFormRef" :model="elFormData" :rules="rules" label-width="120px">
+    <el-form
+      ref="depFormRef"
+      :model="elFormData"
+      :rules="rules"
+      label-width="120px"
+    >
       <el-form-item label="姓名" prop="username">
-        <el-input v-model="elFormData.username" style="width:50%" placeholder="请输入姓名" />
+        <el-input
+          v-model="elFormData.username"
+          style="width: 50%"
+          placeholder="请输入姓名"
+        />
       </el-form-item>
       <el-form-item label="手机" prop="mobile">
-        <el-input v-model="elFormData.mobile" style="width:50%" placeholder="请输入手机号" />
+        <el-input
+          v-model="elFormData.mobile"
+          style="width: 50%"
+          placeholder="请输入手机号"
+        />
       </el-form-item>
       <el-form-item label="入职时间" prop="timeOfEntry">
-        <el-date-picker v-model="elFormData.timeOfEntry" style="width:50%" placeholder="请选择入职时间" />
+        <el-date-picker
+          v-model="elFormData.timeOfEntry"
+          style="width: 50%"
+          placeholder="请选择入职时间"
+        />
       </el-form-item>
       <el-form-item label="聘用形式" prop="formOfEmployment">
-        <el-select v-model="elFormData.formOfEmployment" value="1" style="width:50%" placeholder="请选择">
-          <el-option v-for="item in EmployeeEnum.hireType" :key="item.id" :label="item.value" :value="item.id" />
+        <el-select
+          v-model="elFormData.formOfEmployment"
+          value="1"
+          style="width: 50%"
+          placeholder="请选择"
+        >
+          <el-option
+            v-for="item in EmployeeEnum.hireType"
+            :key="item.id"
+            :label="item.value"
+            :value="item.id"
+          />
         </el-select>
       </el-form-item>
       <el-form-item label="工号" prop="workNumber">
-        <el-input v-model="elFormData.workNumber" style="width:50%" placeholder="请输入工号" />
+        <el-input
+          v-model="elFormData.workNumber"
+          style="width: 50%"
+          placeholder="请输入工号"
+        />
       </el-form-item>
       <el-form-item label="部门" prop="departmentName">
-        <el-input v-model="elFormData.departmentName" style="width:50%" placeholder="请选择部门" @blur="blurInput" @focus="getDepartments" />
+        <el-input
+          v-model="elFormData.departmentName"
+          style="width: 50%"
+          placeholder="请选择部门"
+          @blur="blurInput"
+          @focus="getDepartments"
+        />
         <el-tree
           v-if="showTree"
           v-loading="treeLoading"
@@ -33,7 +70,11 @@
         />
       </el-form-item>
       <el-form-item label="转正时间" prop="correctionTime">
-        <el-date-picker v-model="elFormData.correctionTime" style="width:50%" placeholder="请选择转正时间" />
+        <el-date-picker
+          v-model="elFormData.correctionTime"
+          style="width: 50%"
+          placeholder="请选择转正时间"
+        />
       </el-form-item>
     </el-form>
     <!-- footer插槽 -->
@@ -85,7 +126,7 @@ export default {
       // 新增弹框校验规则
       rules: {
         username: [
-        //  不能为空
+          //  不能为空
           getRequiredRules('用户名'),
           {
             min: 1,
@@ -94,18 +135,23 @@ export default {
             message: '用户名位数不符合规则'
           }
         ],
-        mobile: [getRequiredRules('手机号'), {
-          pattern: /^1[3-9]\d{9}$/,
-          trigger: 'blur',
-          message: '手机号不符合规则'
-        }], // 手机号
+        mobile: [
+          getRequiredRules('手机号'),
+          {
+            pattern: /^1[3-9]\d{9}$/,
+            trigger: 'blur',
+            message: '手机号不符合规则'
+          }
+        ], // 手机号
         formOfEmployment: [getRequiredRules('聘用形式')], // 聘用形式
         workNumber: [getRequiredRules('工号')], // 工号
-        departmentName: [{
-          required: true,
-          trigger: 'change',
-          message: '部门名称不能为空'
-        }], // 部门名称
+        departmentName: [
+          {
+            required: true,
+            trigger: 'change',
+            message: '部门名称不能为空'
+          }
+        ], // 部门名称
         timeOfEntry: [getRequiredRules('入职时间')] // 入职时间
       }
     }
@@ -115,7 +161,7 @@ export default {
   },
   methods: {
     async btnOk() {
-    //  表单校验
+      //  表单校验
       await this.$refs.depFormRef.validate()
       //  提交数据
       await addEmployee(this.elFormData)
@@ -176,4 +222,3 @@ export default {
   overflow: auto;
 }
 </style>
-

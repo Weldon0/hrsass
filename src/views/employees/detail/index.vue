@@ -4,14 +4,23 @@
       <el-card>
         <el-tabs>
           <el-tab-pane label="登录账户设置">
-
             <!-- 放置表单 -->
-            <el-form ref="userInfoForm" :model="formData" :rules="rules" label-width="120px" style="margin-left: 120px; margin-top:30px">
+            <el-form
+              ref="userInfoForm"
+              :model="formData"
+              :rules="rules"
+              label-width="120px"
+              style="margin-left: 120px; margin-top: 30px"
+            >
               <el-form-item label="姓名:" prop="username">
-                <el-input v-model="formData.username" style="width:300px" />
+                <el-input v-model="formData.username" style="width: 300px" />
               </el-form-item>
               <el-form-item label="密码:" prop="password2">
-                <el-input v-model="formData.password2" style="width:300px" type="password" />
+                <el-input
+                  v-model="formData.password2"
+                  style="width: 300px"
+                  type="password"
+                />
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" @click="saveUser">更新</el-button>
@@ -19,10 +28,23 @@
             </el-form>
           </el-tab-pane>
           <el-tab-pane label="个人详情">
-            <!--            <UserComponent />-->
+            <el-row type="flex" justify="end">
+              <el-tooltip content="打印个人基本信息">
+                <router-link :to="`/employees/print/${userId}?type=personal`">
+                  <i class="el-icon-printer" />
+                </router-link>
+              </el-tooltip>
+            </el-row>
             <component :is="UserComponent" />
           </el-tab-pane>
           <el-tab-pane label="岗位信息">
+            <el-row type="flex" justify="end">
+              <el-tooltip content="打印岗位信息">
+                <router-link :to="`/employees/print/${userId}?type=job`">
+                  <i class="el-icon-printer" />
+                </router-link>
+              </el-tooltip>
+            </el-row>
             <component :is="JobComponent" />
           </el-tab-pane>
         </el-tabs>
