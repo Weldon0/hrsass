@@ -1,16 +1,26 @@
 <template>
-  <div class="dashboard-container">
+  <div v-loading="loading" class="dashboard-container">
     <div class="app-container dep">
       <el-card :body-style="{background: '#67C23A', color: '#fff'}" shadow="never">
-        <TreeTools :is-root="true" :tree-node="companyNode" @handleAddDept="handleAddDept" @handleGetDeparts="handleGetDeparts" />
+        <TreeTools
+          :is-root="true"
+          :tree-node="companyNode"
+          @handleAddDept="handleAddDept"
+          @handleGetDeparts="handleGetDeparts"
+        />
       </el-card>
       <el-tree :default-expand-all="true" :data="departs" :props="defaultProps" @node-click="handleNodeClick">
         <template v-slot="{data}">
-          <TreeTools :tree-node="data" @handleAddDept="handleAddDept" @handleGetDeparts="handleGetDeparts" />
+          <TreeTools
+            :tree-node="data"
+            @handleEditDept="handleEditDept"
+            @handleAddDept="handleAddDept"
+            @handleGetDeparts="handleGetDeparts"
+          />
         </template>
       </el-tree>
     </div>
-    <AddDept :show-dialog.sync="showDialog" :tree-node="node" @getDept="handleGetDeparts" />
+    <AddDept ref="addDept" :show-dialog.sync="showDialog" :tree-node="node" @getDept="handleGetDeparts" />
   </div>
 </template>
 
@@ -27,6 +37,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       showDialog: false,
       node: {},
       defaultProps: {
@@ -51,7 +62,18 @@ export default {
       this.node = node
       this.showDialog = true
     },
+    // 编辑部门的功能
+    handleEditDept(node) {
+      // 记录当前点击的节点信息
+      this.node = node
+      // 弹出层做展示
+      this.showDialog = true
+
+      //  调用子组件获取详细信息的方法
+      this.$refs.addDept.getDeptsDetail(node.id)
+    },
     async handleGetDeparts() {
+      this.loading = true
       const data = await getDepartments()
       // 公司信息
       this.companyNode = {
@@ -61,6 +83,8 @@ export default {
       }
       // tree组件的信息
       this.departs = transData(data.depts, '')
+
+      this.loading = false
     }
   }
 }

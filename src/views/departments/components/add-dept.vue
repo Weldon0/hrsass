@@ -1,6 +1,6 @@
 <template>
   <!-- 新增部门的弹层 -->
-  <el-dialog title="新增部门" :visible="showDialog" @close="btnCancel">
+  <el-dialog :title="dialogTitle" :visible="showDialog" @close="btnCancel">
     <!-- 表单组件  el-form   label-width设置label的宽度   -->
     <!-- 匿名插槽 -->
     <el-form ref="addForm" :model="formData" :rules="rules" label-width="120px">
@@ -32,10 +32,11 @@
 </template>
 
 <script>
-import { addDepartments, getDepartments } from '@/api/departs'
+import { addDepartments, getDepartDetail, getDepartments, updateDepartments } from '@/api/departs'
 import { getEmployeeSimple } from '@/api/employees'
 
 export default {
+  name: 'ADDDEPT',
   props: {
     showDialog: {
       type: Boolean,
@@ -54,18 +55,31 @@ export default {
       // 找出当前点击的部门的所有子部门
       // 请求所有数据
       const { depts } = await getDepartments()
-      // 同级部门的名称不能相同
-      // treeNode当前点击的节点
-      // some方法只要有一个满足条件就返回true：查看是否有满足条件的元素
-      const isRepeat = depts.filter(item => item.pid === this.treeNode.id).some(item => item.name === value)
+      let isRepeat = false
+
+      if (this.formData.id) {
+        // 同级数据
+        isRepeat = depts.filter(item => item.id !== this.treeNode.id && item.pid === this.treeNode.pid).some(item => item.name === value)
+      } else {
+        // 同级部门的名称不能相同
+        // treeNode当前点击的节点
+        // some方法只要有一个满足条件就返回true：查看是否有满足条件的元素
+        isRepeat = depts.filter(item => item.pid === this.treeNode.id).some(item => item.name === value)
+      }
+
       isRepeat ? callback(new Error(`${value}部门已经找到`)) : callback()
     }
 
     const checkCode = async(rules, value, callback) => {
       const { depts } = await getDepartments()
       // 判断逻辑
+      let isRepeat = false
       // 所有数据的code都不能相同
-      const isRepeat = depts.some(item => item.code === value)
+      if (this.formData.id) {
+        isRepeat = depts.some(item => item.id !== this.treeNode.id && item.code === value)
+      } else {
+        isRepeat = depts.some(item => item.code === value)
+      }
       isRepeat ? callback(new Error(`${value}编码已经找到`)) : callback()
     }
 
@@ -133,26 +147,52 @@ export default {
       }
     }
   },
+  computed: {
+    dialogTitle() {
+      return this.formData.id ? '编辑部门' : '新增部门'
+    }
+  },
   methods: {
-    async  getEmployee() {
-    //    获取负责人数据
+    // 获取当前部门详情
+    async getDeptsDetail(id) {
+      const data = await getDepartDetail(id)
+      //  拿到数据赋值给formData
+      this.formData = data
+    },
+    async getEmployee() {
+      // 获取负责人数据
       this.peoples = await getEmployeeSimple()
     },
     async btnOk() {
-    //  校验表单
-    //
+      //  校验表单
       await this.$refs.addForm.validate()
-      //  提交数据
-      await addDepartments({
-        ...this.formData,
-        pid: this.treeNode.id// 当前点击的数据的id
-      })
 
+      // 有id  编辑功能
+      if (this.formData.id) {
+        // 编辑
+        await updateDepartments(this.formData)
+        // 进行成功的提示
+        this.$message.success('编辑成功')
+      } else {
+        await addDepartments({
+          ...this.formData,
+          pid: this.treeNode.id// 当前点击的数据的id
+        })
+        this.$message.success('添加成功')
+      }
       this.$emit('getDept')
-      this.$emit('update:showDialog')
+      this.$emit('update:showDialog', false)
     },
     btnCancel() {
+      // 手动重置数据
+      this.formData = {
+        name: '',
+        code: '',
+        manager: '',
+        introduce: ''
+      }
       this.$emit('update:showDialog', false)
+      // 非表单中的数据不能重置
       this.$refs.addForm.resetFields()
     }
   }

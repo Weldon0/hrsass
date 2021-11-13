@@ -26,3 +26,12 @@ export function getRequiredRules(name) {
     required: true
   }
 }
+
+export function getMinMaxRules(min, max, name) {
+  return {
+    min,
+    max,
+    message: `${name}的长度为${min}-${max}位`,
+    trigger: 'blur'
+  }
+}

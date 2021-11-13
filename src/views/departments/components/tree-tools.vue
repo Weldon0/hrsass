@@ -46,8 +46,10 @@ export default {
         console.log('添加')
         this.$emit('handleAddDept', this.treeNode)
       //
-      } else if (type === 'eidt') {
+      } else if (type === 'edit') {
         console.log('编辑')
+        //  触发父组件的编辑功能
+        this.$emit('handleEditDept', this.treeNode)
       } else if (type === 'del') {
         console.log('删除')
         // 弹出层

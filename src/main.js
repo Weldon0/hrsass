@@ -16,12 +16,27 @@ import router from './router'
 import '@/icons' // icon
 import '@/permission' // permission control
 
+import Component from '@/components'
+
+import * as filters from '@/filters'
+
+console.log(filters)
+// 获取对象的key，放到数组里面
+
+Object.keys(filters).forEach(key => {
+  Vue.filter(key, filters[key])
+})
+
 // 引入指令文件
 import * as directives from './directives'
 
 Object.keys(directives).forEach(key => {
   Vue.directive(key, directives[key])
 })
+
+Vue.use(Component) // {install: (Vue) => {}} (Vue) => {}
+
+// 传入的参数对象 ==> install
 
 /**
  * If you don't want to use mock-server
