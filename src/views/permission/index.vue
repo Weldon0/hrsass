@@ -1,9 +1,11 @@
 <template>
   <div class="dashboard-container">
     <div class="app-container">
-      <h2>
-        权限管理
-      </h2>
+      <page-tools>
+        <template #after>
+          <el-button type="primary">添加菜单</el-button>
+        </template>
+      </page-tools>
     </div>
   </div>
 </template>

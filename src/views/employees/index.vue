@@ -75,7 +75,7 @@
               <el-button type="text" size="small">转正</el-button>
               <el-button type="text" size="small">调岗</el-button>
               <el-button type="text" size="small">离职</el-button>
-              <el-button type="text" size="small">角色</el-button>
+              <el-button type="text" size="small" @click="editRole(row.id)">角色</el-button>
               <el-button
                 type="text"
                 size="small"
@@ -106,6 +106,8 @@
           <canvas ref="myCanvas" />
         </el-row>
       </el-dialog>
+
+      <AssignRoles ref="assinRoles" :user-id="userId" :dialog-visible.sync="dialogVisible" />
     </div>
   </div>
 </template>
@@ -114,6 +116,7 @@
 import { delEmployee, getEmployeeList } from '@/api/employees'
 import EmployeeEnum from '@/api/constant/employees'
 import AddEmployees from './components/add-employee'
+import AssignRoles from './components/assign-role'
 import { formatDate } from '@/filters'
 import Qrcode from 'qrcode'
 
@@ -122,14 +125,17 @@ import mapData from '@/api/constant/employees'
 export default {
   components: {
     // PageTools
-    AddEmployees
+    AddEmployees,
+    AssignRoles
   },
   data() {
     return {
+      dialogVisible: false,
       showDialog: false,
       qrImgVisible: false,
       loading: false,
       imgUrl: '',
+      userId: '',
       list: [],
       page: {
         page: 1,
@@ -142,6 +148,12 @@ export default {
     this.getList()
   },
   methods: {
+    editRole(id) {
+      this.dialogVisible = true
+      this.userId = id
+      // 子组件获取角色详情的方法
+      this.$refs.assinRoles.getRoleDetailById(id)
+    },
     showImgQrCode(url) {
       console.log(url)
       if (url) {
