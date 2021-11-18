@@ -89,8 +89,9 @@ export const constantRoutes = [
 ]
 
 const createRouter = () => new Router({
-  // mode: 'history', // require service support
+  mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
+  base: 'hr',
   // 真正的路由配置
   routes: [
     // 静态路由
