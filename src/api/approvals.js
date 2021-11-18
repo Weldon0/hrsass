@@ -8,6 +8,7 @@ export function getApprovalList(data) {
   })
 }
 // 获取审批信息
+console.log('a')
 export function getInformation(id) {
   return request({
     url: `/user/process/instance/getById/${id}`
