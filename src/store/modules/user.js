@@ -1,5 +1,6 @@
 import { setToken, removeToken, getToken, setTimeStamp } from '@/utils/auth'
 import { getInfo, getUserDetailById, login } from '@/api/user'
+import { resetRouter } from '@/router'
 
 const state = {
   token: getToken(),
@@ -47,6 +48,12 @@ const actions = {
     context.commit('removeToken')
     //  userInfo
     context.commit('removeUserInfo')
+
+    //  重置路由匹配信息
+    resetRouter()
+    //  vuex保存router清空
+    //  设置成  { root: true } 就表示当前的context不是子模块了 而是父模块
+    context.commit('permission/setRouter', [], { root: true })
   }
 }
 

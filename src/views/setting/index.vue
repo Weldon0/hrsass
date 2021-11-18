@@ -23,7 +23,7 @@
               <el-table-column label="描述" prop="description" />
               <el-table-column label="操作">
                 <template v-slot="{row}">
-                  <el-button size="small" type="success">分配权限</el-button>
+                  <el-button size="small" type="success" @click="assginPermission(row.id)">分配权限</el-button>
                   <el-button size="small" type="primary" @click="editRole(row.id)">编辑</el-button>
                   <el-button size="small" type="danger" @click="delRole(row.id)">删除</el-button>
                 </template>
@@ -83,15 +83,48 @@
         </el-row>
       </el-dialog>
     </div>
+    <el-dialog
+      title="提示"
+      :visible.sync="permissionShowDialog"
+      width="30%"
+    >
+      <el-tree
+        ref="permissionRef"
+        :data="permissionList"
+        :props=" { label: 'name' }"
+        :show-checkbox="true"
+        :check-strictly="true"
+        default-expand-all
+        :default-checked-keys="selectCheck"
+        node-key="id"
+      />
+      <span slot="footer" class="dialog-footer">
+        <el-row type="flex" justify="center">
+          <el-col :span="12">
+            <el-button type="" size="mini" @click="cancelPermissionDialog">取消</el-button>
+            <el-button type="primary" size="mini" @click="submitPermission">确定</el-button>
+          </el-col>
+        </el-row>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
-import { addRole, deleteRole, getCompanyInfo, getRoleDetail, getRoleList, updateRole } from '@/api/setting'
+import { addRole, assignPerm, deleteRole, getCompanyInfo, getRoleDetail, getRoleList, updateRole } from '@/api/setting'
 import { mapGetters } from 'vuex'
+import { getPermissionList } from '@/api/permission'
+import { transData } from '@/utils'
 
+// 获取数据 树形组件正确的展示
+// 默认选中的展示
 export default {
   data() {
     return {
+      roleId: '',
+      permissionList: [{ id: 1,
+        name: '测试节点' }],
+      selectCheck: [],
+      permissionShowDialog: false,
       roleForm: {},
       rules: {
         name: [
@@ -125,6 +158,39 @@ export default {
     this.getCompanyInfo()
   },
   methods: {
+    async submitPermission() {
+    //  提交数据
+    //  获取到数据
+    //  树节点选中的id列表
+    //  修改的是哪个角色
+      const permIds = this.$refs.permissionRef.getCheckedKeys()
+      // 提交接口修改权限信息
+      await assignPerm({
+        permIds,
+        id: this.roleId
+      })
+      this.$message.success('修改权限成功')
+      this.cancelPermissionDialog()
+    },
+    cancelPermissionDialog() {
+    //  关闭弹层
+      this.permissionShowDialog = false
+      //  选中的节点清空
+      this.selectCheck = []
+    },
+    async assginPermission(id) {
+      // 获取的所有的权限 ==> 提供用户做选择
+      const data = await getPermissionList()
+      this.permissionList = transData(data, '0')
+
+      // 获取当前角色所对应的权限信息做默认选中
+      const { permIds } = await getRoleDetail(id)
+      this.selectCheck = permIds
+
+      //  id当前需要修改权限的角色
+      this.permissionShowDialog = true
+      this.roleId = id
+    },
     async editRole(id) {
       this.showDialog = true
 

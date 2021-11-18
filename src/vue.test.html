@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.14/vue.js"></script>
+</head>
+<body>
+<div id="root">
+  <div>
+    {{name}}
+    <h1>{{age}}</h1>
+  </div>
+</div>
+<script>
+  new Vue({
+    el: '#root',
+    data: {
+      name: '黑马',
+    },
+    mounted() {
+      this.age = 1
+    }
+  })
+</script>
+</body>
+</html>

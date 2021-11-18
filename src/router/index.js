@@ -9,6 +9,7 @@ import attendancesRouter from './modules/attendances'
 import salarysRouter from './modules/salarys'
 import settingRouter from './modules/setting'
 import socialRouter from './modules/social'
+import user from './modules/user'
 
 Vue.use(Router)
 
@@ -63,14 +64,14 @@ export const constantRoutes = [
     component: () => import('@/views/404'),
     hidden: true
   },
-
   {
     path: '/',
     component: Layout,
     redirect: '/dashboard',
+    name: 'dashboard',
     children: [{
       path: 'dashboard',
-      name: 'Dashboard',
+      name: 'dashboard',
       component: () => import('@/views/dashboard/index'),
       meta: { title: 'Dashboard', icon: 'dashboard' }
     }]
@@ -84,9 +85,7 @@ export const constantRoutes = [
       component: () => import('@/views/import')
     }]
   },
-
-  // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+  user
 ]
 
 const createRouter = () => new Router({
@@ -94,8 +93,8 @@ const createRouter = () => new Router({
   scrollBehavior: () => ({ y: 0 }),
   // 真正的路由配置
   routes: [
-    ...constantRoutes,
-    ...asyncRoutes
+    // 静态路由
+    ...constantRoutes
   ]
 })
 

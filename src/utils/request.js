@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
+import pending from './pending.js'
 import store from '@/store'
 import router from '@/router'
 import { getTimeStamp } from '@/utils/auth'

@@ -2,23 +2,29 @@
   <div class="dashboard-container">
     <div class="app-container">
       <PageTools :has-before="true">
-        <template #before> 共166条记录 </template>
+        <template #before> 共166条记录</template>
         <template #after>
           <el-button
             size="mini"
             type="warning"
             @click="$router.push(`/import?type=em`)"
-          >导入</el-button>
+          >
+            导入
+          </el-button>
           <el-button
             size="mini"
             type="danger"
             @click="exportData"
-          >导出</el-button>
+          >
+            导出
+          </el-button>
           <el-button
             size="mini"
             type="primary"
             @click="showDialog = true"
-          >新增员工</el-button>
+          >
+            新增员工
+          </el-button>
         </template>
       </PageTools>
 
@@ -71,7 +77,8 @@
                 type="text"
                 size="small"
                 @click="$router.push(`/employees/detail/${row.id}`)"
-              >查看</el-button>
+              >查看
+              </el-button>
               <el-button type="text" size="small">转正</el-button>
               <el-button type="text" size="small">调岗</el-button>
               <el-button type="text" size="small">离职</el-button>
@@ -79,8 +86,10 @@
               <el-button
                 type="text"
                 size="small"
+                :disabled="!checkPermission('point-user-delete')"
                 @click="delRole(row.id)"
-              >删除</el-button>
+              >删除
+              </el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -120,6 +129,9 @@ import AssignRoles from './components/assign-role'
 import { formatDate } from '@/filters'
 import Qrcode from 'qrcode'
 
+// 引入混入对象
+import mixin from '@/mixin/checkPermission'
+
 import mapData from '@/api/constant/employees'
 
 export default {
@@ -128,6 +140,7 @@ export default {
     AddEmployees,
     AssignRoles
   },
+  mixins: [mixin],
   data() {
     return {
       dialogVisible: false,
@@ -143,6 +156,10 @@ export default {
         total: 0
       }
     }
+  },
+  mounted() {
+    console.log(this.checkPermission)
+    console.log(this.message)
   },
   created() {
     this.getList()

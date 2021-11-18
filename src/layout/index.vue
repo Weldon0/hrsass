@@ -5,6 +5,7 @@
     <div class="main-container">
       <div :class="{'fixed-header':fixedHeader}">
         <navbar />
+        <tags-view />
       </div>
       <app-main />
     </div>
@@ -44,6 +45,7 @@ export default {
   },
   methods: {
     handleClickOutside() {
+      // bc85943cfa45ef50f7b0dc5d39eddae8
       this.$store.dispatch('app/closeSideBar', { withoutAnimation: false })
     }
   }

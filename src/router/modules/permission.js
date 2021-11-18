@@ -7,9 +7,10 @@ import Layout from '@/layout'
 export default {
   path: '/permission', // 路径
   component: Layout, // 组件
+  name: 'permissions', // 给路由规则加一个name
   // 配置二级路的路由表
   children: [{
-    name: 'permission', // 给路由规则加一个name
+    name: 'permissions', // 给路由规则加一个name
     path: '', // 这里当二级路由的path什么都不写的时候 表示该路由为当前二级路由的默认路由
     component: () => import('@/views/permission'),
     // 路由元信息  其实就是存储数据的对象 我们可以在这里放置一些信息

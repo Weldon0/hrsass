@@ -8,6 +8,9 @@
     <!--    <breadcrumb class="breadcrumb-container" />-->
 
     <div class="right-menu">
+      <Lang />
+      <Theme class="right-menu-item" />
+      <screen-full class="right-menu-item" />
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           <img v-imgerror="defaultImg" :src="avatar" class="user-avatar">
@@ -72,6 +75,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 .navbar {
   height: 50px;
   overflow: hidden;
@@ -107,11 +111,12 @@ export default {
 
     .right-menu-item {
       display: inline-block;
+      vertical-align: middle;
       padding: 0 8px;
       height: 100%;
       font-size: 18px;
       color: #5a5e66;
-      vertical-align: text-bottom;
+      margin-right: 10px;
 
       &.hover-effect {
         cursor: pointer;
